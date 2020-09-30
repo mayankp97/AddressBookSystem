@@ -16,6 +16,11 @@ namespace AddressBookSystem
 
         public void AddContact(Contact contact)
         {
+            if (contacts.ContainsKey(contact.firstName))
+            {
+                Console.WriteLine("Contact Already Exists.");
+                return;
+            }
             contacts.Add(contact.firstName, contact);
             numberOfContacts = contacts.Count;
         }

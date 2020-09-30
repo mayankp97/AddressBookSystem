@@ -7,28 +7,58 @@ namespace AddressBookSystem
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Welcome to Address Book System!");
+            const string Console_Message = "Please select an option : \n1.Add Contact\n2.Edite existing Contact\n3.Delete existing Contact\n4.Quit\nEnter your option :";
 
+            Console.WriteLine("Welcome to Address Book System!");
             //Adding a contact to contact book
             var addressbook = new AddressBook();
-            addressbook.AddContact(new Contact("A", "Raja", 
+            addressbook.AddContact(new Contact("A", "Raja",
                 new Address("Bazar A", "Kolkata", "WB", 1452), "12345", "gmail.com"));
 
-            //Editing by using first name of the contact
-            Console.Write("Enter the name of the person to edit contact details :");
-            var firstName = Console.ReadLine();
+            bool quit = false;
 
-            if (!addressbook.contacts.ContainsKey(firstName))
-                Console.WriteLine("No record(s) found");
-            else
+            while (quit != true)
             {
-                var contactToEdit = addressbook.contacts[firstName];
-                Console.WriteLine("################ The existing details are ############");
-                DisplayContact(contactToEdit);
-                Console.WriteLine("################ Enter the new details ############");
-                var contact = TakeInputForContact();
-                addressbook.EditContact(firstName, contact);
+                Console.Write(Console_Message);
+                var input = Convert.ToInt32(Console.ReadLine());
+                switch (input)
+                {
+                    case 1:
+                        var newContact = TakeInputForContact();
+                        addressbook.AddContact(newContact);
+                        Console.WriteLine("Contact Added Successfully.");
+                        break;
+                    case 2:
+                        //Editing by using first name of the contact
+                        Console.Write("Enter the name of the person to edit contact details :");
+                        var firstName = Console.ReadLine();
+
+                        if (!addressbook.contacts.ContainsKey(firstName))
+                            Console.WriteLine("No record(s) found");
+                        else
+                        {
+                            var contactToEdit = addressbook.contacts[firstName];
+                            Console.WriteLine("################ The existing details are ############");
+                            DisplayContact(contactToEdit);
+                            Console.WriteLine("################ Enter the new details ############");
+                            var contact = TakeInputForContact();
+                            addressbook.EditContact(firstName, contact);
+                        }
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        quit = true;
+                        break;
+                    default:
+                        Console.WriteLine("Invalid Input");
+                        break;
+                }
             }
+
+            
+
+            
             
         }
 
