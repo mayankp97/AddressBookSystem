@@ -26,11 +26,7 @@ namespace AddressBookSystem
         }
         public void EditContact(string firstName, Contact contact)
         {
-            if (!contacts.ContainsKey(firstName))
-            {
-                Console.WriteLine("Input Contact Name does not exist.");
-                return;
-            }
+            
             if (firstName == contact.firstName)
                 contacts[firstName] = contact;
             else
@@ -40,6 +36,17 @@ namespace AddressBookSystem
             }
 
             Console.WriteLine("Contact Edited Successfully!");
+        }
+
+        public void DeleteContact(string firstName)
+        {
+            if (!contacts.ContainsKey(firstName))
+            {
+                Console.WriteLine("Input Contact Name does not exist.");
+                return;
+            }
+            contacts.Remove(firstName);
+            Console.WriteLine("Contact Deleted Successfully.");
         }
     }
 }

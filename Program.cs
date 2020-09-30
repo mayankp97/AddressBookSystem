@@ -7,7 +7,7 @@ namespace AddressBookSystem
     {
         static void Main(string[] args)
         {
-            const string Console_Message = "Please select an option : \n1.Add Contact\n2.Edite existing Contact\n3.Delete existing Contact\n4.Quit\nEnter your option :";
+            const string Console_Message = "Please select an option : \n1.Add Contact\n2.Edit existing Contact\n3.Delete existing Contact\n4.Quit\nEnter your option :";
 
             Console.WriteLine("Welcome to Address Book System!");
             //Adding a contact to contact book
@@ -26,7 +26,6 @@ namespace AddressBookSystem
                     case 1:
                         var newContact = TakeInputForContact();
                         addressbook.AddContact(newContact);
-                        Console.WriteLine("Contact Added Successfully.");
                         break;
                     case 2:
                         //Editing by using first name of the contact
@@ -46,6 +45,10 @@ namespace AddressBookSystem
                         }
                         break;
                     case 3:
+                        //Deleting by using first name of the contact
+                        Console.Write("Enter the name of the person to edit contact details :");
+                        var firstNameToDelete = Console.ReadLine();
+                        addressbook.DeleteContact(firstNameToDelete);
                         break;
                     case 4:
                         quit = true;
