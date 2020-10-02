@@ -5,18 +5,54 @@ namespace AddressBookSystem
 {
     class Program
     {
+
+        public static Dictionary<string, AddressBook> addressBooks;
         static void Main(string[] args)
         {
-            
-            const string Console_Message = "Please select an option : \n1.Add Contact\n2.Edit existing Contact\n3.Delete existing Contact\n4.Quit\nEnter your option :";
+            addressBooks = new Dictionary<string, AddressBook>();
 
             Console.WriteLine("Welcome to Address Book System!");
-        
+
+            var quit = false;
+
+            while (!quit)
+            {
+                Console.Write("Choose an option\n1.Create New Address Book\n2.Quit\nEnter Your Option :");
+                var input = Convert.ToInt32(Console.ReadLine());
+                switch (input)
+                {
+                    case 1:
+                        Console.Write("Enter a name for your address book :");
+                        var name = Console.ReadLine();
+                        addressBooks.Add(name, new AddressBook());
+                        InitializeAddressBook(name);
+                        break;
+                    case 2:
+                        quit = true;
+                        break;
+                    default:
+                        Console.WriteLine("Invalid Input");
+                        break;
+                }
+
+            }
+
+
+            
+
+            
+            
+        }
+
+        static void InitializeAddressBook(string name)
+        {
+            const string Console_Message = "Please select an option : \n1.Add Contact\n2.Edit existing Contact\n3.Delete existing Contact\n4.Quit\nEnter your option :";
+
             //Adding a contact to contact book
-            var addressbook = new AddressBook();
+            var addressbook = addressBooks[name];
             addressbook.AddContact(new Contact("A", "Raja",
                 new Address("Bazar A", "Kolkata", "WB", 1452), "12345", "gmail.com"));
-        
+
 
             bool quit = false;
 
@@ -61,11 +97,6 @@ namespace AddressBookSystem
                         break;
                 }
             }
-
-            
-
-            
-            
         }
 
         static Contact TakeInputForContact()
