@@ -20,5 +20,7 @@ namespace AddressBookSystem
             this.phoneNumber = phoneNumber;
             this.email = email;
         }
+        public override bool Equals(object obj) => firstName == (string)obj;
+        
     }
 }
