@@ -59,7 +59,7 @@ namespace AddressBookSystem
                         }
                         break;
                     case 4:
-                        Console.Write("Enter the state : ");
+                        Console.Write("Enter the state :");
                         var state = Console.ReadLine();
 
                         if (!addressBookManager.stateContactMap.ContainsKey(state))
