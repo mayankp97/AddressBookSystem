@@ -31,10 +31,10 @@ namespace AddressBookSystem
 
         public void AddToStateMap(Contact contact)
         {
-            if (stateContactMap.ContainsKey(contact.address.city))
-                stateContactMap[contact.address.city].Add(contact);
+            if (stateContactMap.ContainsKey(contact.address.state))
+                stateContactMap[contact.address.state].Add(contact);
             else
-                stateContactMap.Add(contact.address.city, new List<Contact> { contact });
+                stateContactMap.Add(contact.address.state, new List<Contact> { contact });
         }
 
         public List<Contact> SearchInCity(string firstName,string city)
@@ -46,7 +46,7 @@ namespace AddressBookSystem
 
         public List<Contact> SearchInState(string firstName, string state)
         {
-            if (!cityContactMap.ContainsKey(state))
+            if (!stateContactMap.ContainsKey(state))
                 return null;
             return stateContactMap[state].Where(C => C.firstName == firstName).ToList();
         }

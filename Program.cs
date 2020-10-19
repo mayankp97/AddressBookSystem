@@ -24,8 +24,9 @@ namespace AddressBookSystem
 
             while (!quit)
             {
-                Console.Write("Choose an option\n1.Create New Address Book\n2.Open an address book\n4.Search a person in a city\n5.Search a person in a state" +
-                    "\n6.Quit\nEnter Your Option :");
+                Console.Write("Choose an option\n1.Create New Address Book\n2.Open an address book\n3.View Persons by City\n4.View Persons by state" +
+                    "\n5.Search a person in a city\n6.Search a person in a state" +
+                    "\n7.Quit\nEnter Your Option :");
                 var input = Convert.ToInt32(Console.ReadLine());
                 switch (input)
                 {
@@ -44,8 +45,34 @@ namespace AddressBookSystem
                             InitializeAddressBook(name);
                         break;
                     case 3:
+                        Console.Write("Enter the city : ");
+                        var city = Console.ReadLine();
+
+                        if (!addressBookManager.cityContactMap.ContainsKey(city))
+                            Console.WriteLine("No Such City Exists");
+                        else
+                        {
+                            Console.WriteLine("Found {0} Results : ", addressBookManager.cityContactMap[city].Count);
+                            int i = 1;
+                            foreach (var item in addressBookManager.cityContactMap[city])
+                                Console.WriteLine("{0}. {1}", i++, item.firstName); ;
+                        }
                         break;
                     case 4:
+                        Console.Write("Enter the state : ");
+                        var state = Console.ReadLine();
+
+                        if (!addressBookManager.stateContactMap.ContainsKey(state))
+                            Console.WriteLine("No Such State Exists");
+                        else
+                        {
+                            Console.WriteLine("Found {0} Results : ", addressBookManager.stateContactMap[state].Count);
+                            int i = 1;
+                            foreach (var item in addressBookManager.stateContactMap[state])
+                                Console.WriteLine("{0}. {1}", i++, item.firstName); ;
+                        }
+                        break;
+                    case 5:
                         Console.Write("Enter City to Search in : ");
                         var searchCity = Console.ReadLine();
                         Console.Write("Enter name to search : ");
@@ -56,7 +83,7 @@ namespace AddressBookSystem
                         else
                             Console.WriteLine("Found {0} persons named {1} in {2}", list.Count, searchName, searchCity);
                         break;
-                    case 5:
+                    case 6:
                         Console.Write("Enter State to Search in : ");
                         var searchState = Console.ReadLine();
                         Console.Write("Enter name to search : ");
@@ -67,7 +94,7 @@ namespace AddressBookSystem
                         else
                             Console.WriteLine("Found {0} persons named {1} in {2}", list.Count, searchName, searchState);
                         break;
-                    case 6:
+                    case 7:
                         quit = true;
                         break;
                     default:
@@ -86,20 +113,27 @@ namespace AddressBookSystem
 
         static void InitializeAddressBook(string name)
         {
-            const string Console_Message = "Please select an option : \n1.Add Contact\n2.Edit existing Contact\n3.Delete existing Contact\n4.Quit\nEnter your option :";
+            const string Console_Message = "########################You are in {0}#######################\n" +
+                " Please select an option : \n1.Add Contact\n2.Edit existing Contact\n3.Delete existing Contact\n4.Quit\nEnter your option :";
 
             //Adding a contact to contact book
             var addressbook = addressBooks[name];
             addressbook.AddContact(new Contact("A", "Raja",
                 new Address("Bazar A", "Kolkata", "WB", 1452), "12345", "gmail.com"));
+            addressbook.AddContact(new Contact("B", "Raja",
+                new Address("Bazar A", "Kolkata", "WB", 1452), "12345", "gmail.com"));
+            addressBookManager.AddToCityMap(addressbook.contacts["B"]);
             addressBookManager.AddToCityMap(addressbook.contacts["A"]);
+            addressBookManager.AddToStateMap(addressbook.contacts["B"]);
+            addressBookManager.AddToStateMap(addressbook.contacts["A"]);
+
 
 
             bool quit = false;
 
             while (quit != true)
             {
-                Console.Write(Console_Message);
+                Console.Write(Console_Message,name);
                 var input = Convert.ToInt32(Console.ReadLine());
                 switch (input)
                 {
