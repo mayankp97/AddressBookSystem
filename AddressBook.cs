@@ -48,5 +48,10 @@ namespace AddressBookSystem
             contacts.Remove(firstName);
             Console.WriteLine("Contact Deleted Successfully.");
         }
+
+        public void SearchInCity(string firstName, string location)
+        {
+
+        }
     }
 }
