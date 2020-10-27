@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace AddressBookSystem
 {
@@ -109,7 +110,7 @@ namespace AddressBookSystem
         {
             const string Console_Message = "########################You are in {0}#######################\n" +
                 " Please select an option : \n1.Add Contact\n2.Edit existing Contact\n3.Delete existing Contact\n" +
-                "4.Sort Contacts by City\n5.Sort Contacts by State\n6.Sort Contacts by Zip\n7.Sort By Name\n8.Quit\nEnter your option :";
+                "4.Sort Contacts by City\n5.Sort Contacts by State\n6.Sort Contacts by Zip\n7.Sort By Name\n8.Do I/O\n9. Quit\nEnter your option :";
 
             //Adding a contact to contact book
             var addressbook = addressBooks[name];
@@ -185,6 +186,9 @@ namespace AddressBookSystem
                             DisplayContact(contact.Value);
                         break;
                     case 8:
+                        addressBookManager.DoIO(name);
+                        break;
+                    case 9:
                         quit = true;
                         break;
                     default:
@@ -224,6 +228,7 @@ namespace AddressBookSystem
             return new Contact(firstName, lastName, address, phoneNumber, email);
         }
 
+        
         static void DisplayContact(Contact contact)
         {
             Console.WriteLine(" First Name : {0}",contact.firstName);
