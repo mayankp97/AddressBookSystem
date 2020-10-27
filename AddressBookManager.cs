@@ -1,5 +1,7 @@
-﻿using System;
+﻿using CsvHelper;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -54,7 +56,7 @@ namespace AddressBookSystem
 
         public void DoIO(string name)
         {
-            Console.Write("1. Save/Write as .txt file\n2. Read a .txt file\nEnter your option :");
+            Console.Write("1. Save/Write as .txt file\n2. Read a .txt file\n3. Write to a .csv file\n4.Read from the .csv file\nEnter your option :");
             var input = Convert.ToInt32(Console.ReadLine());
             switch (input)
             {
@@ -81,6 +83,33 @@ namespace AddressBookSystem
                         string str = "";
                         while ((str = streamReader.ReadLine()) != null)
                             Console.WriteLine(str);
+                    }
+                    break;
+                case 3:
+                    path = @"C:\Users\Mayank\Desktop\testing\CSharp-Project\" + name + ".csv";
+                    using (var writer = new StreamWriter(path))
+                    using (var csvWriter = new CsvWriter(writer,CultureInfo.InvariantCulture))
+                    {
+                        var list = addressBooks[name].SortByName();
+                        csvWriter.WriteRecords(list);
+                    }
+                    break;
+                case 4:
+                    path = @"C:\Users\Mayank\Desktop\testing\CSharp-Project\" + name + ".csv";
+                    if (!File.Exists(path))
+                    {
+                        Console.WriteLine("No Such File Exists, Please Save before reading.");
+                        break;
+                    }
+                    using(var reader = new StreamReader(path))
+                    using(var csvReader = new CsvReader(reader, CultureInfo.InvariantCulture))
+                    {
+                        var contacts = csvReader.GetRecords<Contact>().ToList();
+                        Console.WriteLine("There are following contacts saved in file : ");
+                        foreach(var contact in contacts)
+                        {
+                            Program.DisplayContact(contact);
+                        }
                     }
                     break;
             }

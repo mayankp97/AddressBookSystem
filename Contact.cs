@@ -21,6 +21,8 @@ namespace AddressBookSystem
             this.email = email;
         }
         public override bool Equals(object obj) => firstName == (string)obj;
-        
+
+        public override string ToString() => firstName + " " + lastName;
+
     }
 }

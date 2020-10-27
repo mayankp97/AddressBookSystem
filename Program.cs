@@ -229,7 +229,7 @@ namespace AddressBookSystem
         }
 
         
-        static void DisplayContact(Contact contact)
+        public static void DisplayContact(Contact contact)
         {
             Console.WriteLine(" First Name : {0}",contact.firstName);
             Console.WriteLine(" Last Name : {0}",contact.lastName);
