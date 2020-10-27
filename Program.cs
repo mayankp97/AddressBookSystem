@@ -114,14 +114,17 @@ namespace AddressBookSystem
         static void InitializeAddressBook(string name)
         {
             const string Console_Message = "########################You are in {0}#######################\n" +
-                " Please select an option : \n1.Add Contact\n2.Edit existing Contact\n3.Delete existing Contact\n4.Quit\nEnter your option :";
+                " Please select an option : \n1.Add Contact\n2.Edit existing Contact\n3.Delete existing Contact\n" +
+                "4.Sort Contacts by City\n5.Sort Contacts by State\n6.Sort Contacts by Zip\n\n7.Quit\nEnter your option :";
 
             //Adding a contact to contact book
             var addressbook = addressBooks[name];
             addressbook.AddContact(new Contact("A", "Raja",
-                new Address("Bazar A", "Kolkata", "WB", 1452), "12345", "gmail.com"));
+                new Address("Bazar A", "CKolkata", "AWB", 1453), "12345", "gmail.com"));
             addressbook.AddContact(new Contact("B", "Raja",
-                new Address("Bazar A", "Kolkata", "WB", 1452), "12345", "gmail.com"));
+                new Address("Bazar A", "Akolkata", "CWB", 1452), "12345", "gmail.com"));
+            addressbook.AddContact(new Contact("C", "Raja",
+                new Address("Bazar A", "Bkolkata", "BWB", 1451), "12345", "gmail.com"));
             addressBookManager.AddToCityMap(addressbook.contacts["B"]);
             addressBookManager.AddToCityMap(addressbook.contacts["A"]);
             addressBookManager.AddToStateMap(addressbook.contacts["B"]);
@@ -166,7 +169,23 @@ namespace AddressBookSystem
                         var firstNameToDelete = Console.ReadLine();
                         addressbook.DeleteContact(firstNameToDelete);
                         break;
+                    //Calling sort methods of addressbook class
                     case 4:
+                        var sortedByCity = addressbook.SortByCity();
+                        foreach (var contact in sortedByCity)
+                            DisplayContact(contact.Value);
+                        break;
+                    case 5:
+                        var sortedByState = addressbook.SortByState();
+                        foreach (var contact in sortedByState)
+                            DisplayContact(contact.Value);
+                        break;
+                    case 6:
+                        var sortedByZip = addressbook.SortByZip();
+                        foreach (var contact in sortedByZip)
+                            DisplayContact(contact.Value);
+                        break;
+                    case 7:
                         quit = true;
                         break;
                     default:
@@ -216,9 +235,7 @@ namespace AddressBookSystem
             Console.WriteLine(" Zip : {0}",contact.address.zip);
             Console.WriteLine(" Phone No. : {0}",contact.phoneNumber);
             Console.WriteLine(" Email : {0}",contact.email);
+            Console.WriteLine("-----------------------------------");
         }
-
-
-
     }
 }

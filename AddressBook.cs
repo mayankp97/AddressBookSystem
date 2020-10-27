@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace AddressBookSystem
@@ -49,9 +50,23 @@ namespace AddressBookSystem
             Console.WriteLine("Contact Deleted Successfully.");
         }
 
-        public void SearchInCity(string firstName, string location)
+        public IEnumerable<KeyValuePair<String,Contact>> SortByCity()
         {
-
+            var contactList = contacts.ToList();
+            contactList.Sort((contact1, contact2) => contact1.Value.address.city.CompareTo(contact2.Value.address.city));
+            return contactList;
+        }
+        public IEnumerable<KeyValuePair<String, Contact>> SortByState()
+        {
+            var contactList = contacts.ToList();
+            contactList.Sort((contact1, contact2) => contact1.Value.address.state.CompareTo(contact2.Value.address.state));
+            return contactList;
+        }
+        public IEnumerable<KeyValuePair<String, Contact>> SortByZip()
+        {
+            var contactList = contacts.ToList();
+            contactList.Sort((contact1, contact2) => contact1.Value.address.zip.CompareTo(contact2.Value.address.zip));
+            return contactList;
         }
     }
 }
