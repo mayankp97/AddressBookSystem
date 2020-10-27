@@ -180,7 +180,7 @@ namespace AddressBookSystem
                             DisplayContact(contact.Value);
                         break;
                     case 7:
-                        var sortedByName = addressbook.SortByZip();
+                        var sortedByName = addressbook.SortByName();
                         foreach (var contact in sortedByName)
                             DisplayContact(contact.Value);
                         break;
