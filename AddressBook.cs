@@ -50,6 +50,12 @@ namespace AddressBookSystem
             Console.WriteLine("Contact Deleted Successfully.");
         }
 
+        public IEnumerable<KeyValuePair<String, Contact>> SortByName()
+        {
+            var contactList = contacts.ToList();
+            contactList.Sort((contact1, contact2) => contact1.Key.CompareTo(contact2.Key));
+            return contactList;
+        }
         public IEnumerable<KeyValuePair<String,Contact>> SortByCity()
         {
             var contactList = contacts.ToList();
