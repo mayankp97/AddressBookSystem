@@ -1,4 +1,5 @@
 ﻿using CsvHelper;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -56,7 +57,7 @@ namespace AddressBookSystem
 
         public void DoIO(string name)
         {
-            Console.Write("1. Save/Write as .txt file\n2. Read a .txt file\n3. Write to a .csv file\n4.Read from the .csv file\nEnter your option :");
+            Console.Write("1. Save/Write to .txt file\n2. Read from  .txt file\n3. Write to a .csv file\n4.Read from the .csv file\n5. Write to .Json file\n6.Read from .Json file\nEnter your option :");
             var input = Convert.ToInt32(Console.ReadLine());
             switch (input)
             {
@@ -90,8 +91,8 @@ namespace AddressBookSystem
                     using (var writer = new StreamWriter(path))
                     using (var csvWriter = new CsvWriter(writer,CultureInfo.InvariantCulture))
                     {
-                        var list = addressBooks[name].SortByName();
-                        csvWriter.WriteRecords(list);
+                        var clist = addressBooks[name].SortByName().ToList();
+                        csvWriter.WriteRecords(clist);
                     }
                     break;
                 case 4:
@@ -104,13 +105,32 @@ namespace AddressBookSystem
                     using(var reader = new StreamReader(path))
                     using(var csvReader = new CsvReader(reader, CultureInfo.InvariantCulture))
                     {
-                        var contacts = csvReader.GetRecords<Contact>().ToList();
+                        var contactList = csvReader.GetRecords<Contact>().ToList();
                         Console.WriteLine("There are following contacts saved in file : ");
-                        foreach(var contact in contacts)
+                        foreach(var contact in contactList)
                         {
                             Program.DisplayContact(contact);
                         }
                     }
+                    break;
+                case 5:
+                    path = @"C:\Users\Mayank\Desktop\testing\CSharp-Project\" + name + ".json";
+                    var list = addressBooks[name].SortByName().ToList();
+                    var copy = new List<Contact>();
+                    foreach (var item in list)
+                        copy.Add(item.Value);
+                    var serializer = new JsonSerializer();
+                    using(var streamWriter = new StreamWriter(path))
+                    using(var jsonWriter = new JsonTextWriter(streamWriter))
+                    {
+                        serializer.Serialize(jsonWriter, copy);
+                    }
+                    break;
+                case 6:
+                    path = @"C:\Users\Mayank\Desktop\testing\CSharp-Project\" + name + ".json";
+                    var contacts = JsonConvert.DeserializeObject<List<KeyValuePair<string, Contact>>>(File.ReadAllText(path));
+                    foreach (var contact in contacts)
+                        Program.DisplayContact(contact.Value);
                     break;
             }
         }
