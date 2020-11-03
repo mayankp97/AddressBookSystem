@@ -57,82 +57,108 @@ namespace AddressBookSystem
 
         public void DoIO(string name)
         {
-            Console.Write("1. Save/Write to .txt file\n2. Read from  .txt file\n3. Write to a .csv file\n4.Read from the .csv file\n5. Write to .Json file\n6.Read from .Json file\nEnter your option :");
+            Console.Write("1. Save/Write to .txt file\n2. Read from  .txt file\n3. Write to a .csv file\n4.Read from the .csv file" +
+                "\n5. Write to .Json file\n6.Read from .Json file\nEnter your option :");
             var input = Convert.ToInt32(Console.ReadLine());
             switch (input)
             {
                 case 1:
-                    var path = @"C:\Users\Mayank\Desktop\testing\CSharp-Project\" + name + ".txt";
-                    using (var streamWriter = File.AppendText(path))
-                    {
-                        foreach (var contact in addressBooks[name].contacts)
-                        {
-                            streamWriter.WriteLine(contact.Value.firstName + " " + contact.Value.lastName);
-                        }
-                        streamWriter.Close();
-                    }
+                    WriteToTxt(name);
                     break;
                 case 2:
-                    path = @"C:\Users\Mayank\Desktop\testing\CSharp-Project\" + name + ".txt";
-                    if (!File.Exists(path))
-                    {
-                        Console.WriteLine("No Such File Exists");
-                        break;
-                    }
-                    using (var streamReader = File.OpenText(path))
-                    {
-                        string str = "";
-                        while ((str = streamReader.ReadLine()) != null)
-                            Console.WriteLine(str);
-                    }
+                    ReadFromTxt(name);
                     break;
                 case 3:
-                    path = @"C:\Users\Mayank\Desktop\testing\CSharp-Project\" + name + ".csv";
-                    using (var writer = new StreamWriter(path))
-                    using (var csvWriter = new CsvWriter(writer,CultureInfo.InvariantCulture))
-                    {
-                        var clist = addressBooks[name].SortByName().ToList();
-                        csvWriter.WriteRecords(clist);
-                    }
+                    WriteToCsv(name);
                     break;
                 case 4:
-                    path = @"C:\Users\Mayank\Desktop\testing\CSharp-Project\" + name + ".csv";
-                    if (!File.Exists(path))
-                    {
-                        Console.WriteLine("No Such File Exists, Please Save before reading.");
-                        break;
-                    }
-                    using(var reader = new StreamReader(path))
-                    using(var csvReader = new CsvReader(reader, CultureInfo.InvariantCulture))
-                    {
-                        var contactList = csvReader.GetRecords<Contact>().ToList();
-                        Console.WriteLine("There are following contacts saved in file : ");
-                        foreach(var contact in contactList)
-                        {
-                            Program.DisplayContact(contact);
-                        }
-                    }
+                    ReadFromCsv(name);
                     break;
                 case 5:
-                    path = @"C:\Users\Mayank\Desktop\testing\CSharp-Project\" + name + ".json";
-                    var list = addressBooks[name].SortByName().ToList();
-                    var copy = new List<Contact>();
-                    foreach (var item in list)
-                        copy.Add(item.Value);
-                    var serializer = new JsonSerializer();
-                    using(var streamWriter = new StreamWriter(path))
-                    using(var jsonWriter = new JsonTextWriter(streamWriter))
-                    {
-                        serializer.Serialize(jsonWriter, copy);
-                    }
+                    WriteToJson(name);
                     break;
                 case 6:
-                    path = @"C:\Users\Mayank\Desktop\testing\CSharp-Project\" + name + ".json";
-                    var contacts = JsonConvert.DeserializeObject<List<KeyValuePair<string, Contact>>>(File.ReadAllText(path));
-                    foreach (var contact in contacts)
-                        Program.DisplayContact(contact.Value);
+                    ReadFromJson(name);
                     break;
             }
+        }
+
+        public void WriteToTxt(string name)
+        {
+            var path = @"C:\Users\Mayank\Desktop\testing\CSharp-Project\" + name + ".txt";
+            using (var streamWriter = File.AppendText(path))
+            {
+                foreach (var contact in addressBooks[name].contacts)
+                {
+                    streamWriter.WriteLine(contact.Value.firstName + " " + contact.Value.lastName);
+                }
+                streamWriter.Close();
+            }
+        }
+        public void ReadFromTxt(string name)
+        {
+            var path = @"C:\Users\Mayank\Desktop\testing\CSharp-Project\" + name + ".txt";
+            if (!File.Exists(path))
+            {
+                Console.WriteLine("No Such File Exists");
+                return;
+            }
+            using (var streamReader = File.OpenText(path))
+            {
+                string str = "";
+                while ((str = streamReader.ReadLine()) != null)
+                    Console.WriteLine(str);
+            }
+        }
+        public void WriteToCsv(string name)
+        {
+            var path = @"C:\Users\Mayank\Desktop\testing\CSharp-Project\" + name + ".csv";
+            using (var writer = new StreamWriter(path))
+            using (var csvWriter = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            {
+                var clist = addressBooks[name].SortByName().ToList();
+                csvWriter.WriteRecords(clist);
+            }
+        }
+        public void ReadFromCsv(string name)
+        {
+            var path = @"C:\Users\Mayank\Desktop\testing\CSharp-Project\" + name + ".csv";
+            if (!File.Exists(path))
+            {
+                Console.WriteLine("No Such File Exists, Please Save before reading.");
+                return;
+            }
+            using (var reader = new StreamReader(path))
+            using (var csvReader = new CsvReader(reader, CultureInfo.InvariantCulture))
+            {
+                var contactList = csvReader.GetRecords<Contact>().ToList();
+                Console.WriteLine("There are following contacts saved in file : ");
+                foreach (var contact in contactList)
+                {
+                    Program.DisplayContact(contact);
+                }
+            }
+        }
+        public void WriteToJson(string name)
+        {
+            var path = @"C:\Users\Mayank\Desktop\testing\CSharp-Project\" + name + ".json";
+            var list = addressBooks[name].SortByName().ToList();
+            var copy = new List<Contact>();
+            foreach (var item in list)
+                copy.Add(item.Value);
+            var serializer = new JsonSerializer();
+            using (var streamWriter = new StreamWriter(path))
+            using (var jsonWriter = new JsonTextWriter(streamWriter))
+            {
+                serializer.Serialize(jsonWriter, copy);
+            }
+        }
+        public void ReadFromJson(string name)
+        {
+            var path = @"C:\Users\Mayank\Desktop\testing\CSharp-Project\" + name + ".json";
+            var contacts = JsonConvert.DeserializeObject<List<KeyValuePair<string, Contact>>>(File.ReadAllText(path));
+            foreach (var contact in contacts)
+                Program.DisplayContact(contact.Value);
         }
     }
 }
