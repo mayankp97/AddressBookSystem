@@ -50,10 +50,60 @@ namespace AddressBookDB
                             contactModel.Zipcode = reader["ZipCode"].ToString();
                             contactModel.PhoneNumber = reader["PhoneNumber"].ToString();
                             contactModel.Email = reader["Email"].ToString();
+                            contactModel.DateAdded = Convert.ToDateTime(reader["DateAdded"]);
                             contacts.Add(contactModel);
                         }
                     }
                   
+                }
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.StackTrace);
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
+        }
+        public static void RetrieveAllContactsInDateRange(DateTime startDate,DateTime endDate)
+        {
+            contacts = new List<ContactModel>();
+            try
+            {
+                SetConnection();
+                using (sqlConnection)
+                {
+                    var query = @"select * from ABookTable A Inner Join AddressInfo B On A.Id = B.Id"
+                                + " Inner Join ContactInfo C On A.Id = C.Id where DateAdded > @startDate AND DateAdded < @endDate";
+                    var sqlCommand = new SqlCommand(query, sqlConnection);
+                    sqlCommand.Parameters.AddWithValue("startDate", startDate);
+                    sqlCommand.Parameters.AddWithValue("endDate", endDate);
+                    sqlConnection.Open();
+                    var reader = sqlCommand.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            var contactModel = new ContactModel();
+                            contactModel.ContactId = Convert.ToInt32(reader["Id"]);
+                            contactModel.FirstName = reader["FirstName"].ToString();
+                            contactModel.LastName = reader["LastName"].ToString();
+                            contactModel.RelationType = reader["RelationType"].ToString();
+                            contactModel.Address = reader["Address"].ToString();
+                            contactModel.City = reader["City"].ToString();
+                            contactModel.State = reader["State"].ToString();
+                            contactModel.Zipcode = reader["ZipCode"].ToString();
+                            contactModel.PhoneNumber = reader["PhoneNumber"].ToString();
+                            contactModel.Email = reader["Email"].ToString();
+                            contactModel.DateAdded = Convert.ToDateTime(reader["DateAdded"]);
+                            contacts.Add(contactModel);
+                            DisplayContacts();
+                        }
+                    }
+
                 }
             }
             catch (Exception ex)

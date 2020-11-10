@@ -36,5 +36,16 @@ namespace AddressBookDBTest
 
             Assert.That(previousName, Is.Not.EqualTo(newName));
         }
+        [Test]
+        public void RetrieveAllContactsInDateRange_WhenCalled_AddContactsToList()
+        {
+            var startDate = Convert.ToDateTime("01/01/2019");
+            var endDate = Convert.ToDateTime("01/01/2020");
+            AddressBookRepo.RetrieveAllContactsInDateRange(startDate, endDate);
+
+            var list = AddressBookRepo.contacts;
+
+            Assert.That(list, Is.Not.Empty);
+        }
     }
 }

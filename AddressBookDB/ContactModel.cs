@@ -16,11 +16,12 @@ namespace AddressBookDB
         public string Zipcode { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
+        public DateTime DateAdded { get; set; }
 
         public void Display()
         {
             Console.Write(ContactId + " " + FirstName + " " + LastName + " " + RelationType + " " + Address
-                + " " + City + " " + State + " " + Zipcode + " " + PhoneNumber + " " + Email+"\n");
+                + " " + City + " " + State + " " + Zipcode + " " + PhoneNumber + " " + Email+" "+DateAdded+"\n");
         }
 
     }
