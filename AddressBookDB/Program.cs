@@ -26,9 +26,15 @@ namespace AddressBookDB
             var endDate = Convert.ToDateTime("01/01/2020");
             AddressBookRepo.RetrieveAllContactsInDateRange(startDate, endDate);
             */
-
+            /*
             //Retrieving Count by city
             AddressBookRepo.RetrieveContactsCountByCity();
+            */
+            //Adding Contact
+            var contactModel = new ContactModel { FirstName = "Iron", LastName = "Hulk", RelationType = "Father", DateAdded = DateTime.Now,
+                Address = "starks", State = "NY", City = "NYC", Zipcode = "45454", PhoneNumber = "454545454", Email="@iron.com" };
+            AddressBookRepo.AddContact(contactModel);
+
             
         }
     }

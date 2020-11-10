@@ -153,6 +153,38 @@ namespace AddressBookDB
                 sqlConnection.Close();
             }
         }
+
+        public static void AddContact(ContactModel updateContactModel)
+        {
+            try
+            {
+                SetConnection();
+                var sqlCommand = new SqlCommand("SpAddContact", sqlConnection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@FirstName", updateContactModel.FirstName);
+                sqlCommand.Parameters.AddWithValue("@LastName", updateContactModel.LastName);
+                sqlCommand.Parameters.AddWithValue("@RelationType", updateContactModel.RelationType);
+                sqlCommand.Parameters.AddWithValue("@Address", updateContactModel.Address);
+                sqlCommand.Parameters.AddWithValue("@City", updateContactModel.City);
+                sqlCommand.Parameters.AddWithValue("@State", updateContactModel.State);
+                sqlCommand.Parameters.AddWithValue("@Zipcode", updateContactModel.Zipcode);
+                sqlCommand.Parameters.AddWithValue("@PhoneNumber", updateContactModel.PhoneNumber);
+                sqlCommand.Parameters.AddWithValue("@Email", updateContactModel.Email);
+                sqlCommand.Parameters.AddWithValue("@DateAdded", updateContactModel.DateAdded);
+                sqlConnection.Open();
+                var reader = sqlCommand.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.StackTrace);
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
+        }
         public static void UpdateContact(ContactModel updateContactModel)
         {
             try
