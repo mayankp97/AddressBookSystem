@@ -117,7 +117,42 @@ namespace AddressBookDB
                 sqlConnection.Close();
             }
         }
+        public static void RetrieveContactsCountByCity()
+        {
+            contacts = new List<ContactModel>();
+            try
+            {
+                SetConnection();
+                using (sqlConnection)
+                {
+                    var query = @"select Count(*) As Num ,City from ABookTable A Inner Join AddressInfo B On A.Id = B.Id"
+                                + " Inner Join ContactInfo C On A.Id = C.Id Group By City";
+                    var sqlCommand = new SqlCommand(query, sqlConnection);
+                    sqlConnection.Open();
+                    var reader = sqlCommand.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            var count = Convert.ToInt32(reader["Num"]);
+                            var city = reader["City"].ToString();
+                            Console.WriteLine("City : {0} | Count : {1}", city, count);
+                        }
+                    }
 
+                }
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.StackTrace);
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
+        }
         public static void UpdateContact(ContactModel updateContactModel)
         {
             try
