@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace AddressBookDB
@@ -32,7 +31,7 @@ namespace AddressBookDB
                 using (sqlConnection)
                 {
                     var query = @"select * from ABookTable A Inner Join AddressInfo B On A.Id = B.Id"
-                                +" Inner Join ContactInfo C On A.Id = C.Id";
+                                + " Inner Join ContactInfo C On A.Id = C.Id";
                     var sqlCommand = new SqlCommand(query, sqlConnection);
                     sqlConnection.Open();
                     var reader = sqlCommand.ExecuteReader();
@@ -55,7 +54,7 @@ namespace AddressBookDB
                             contacts.Add(contactModel);
                         }
                     }
-                  
+
                 }
             }
             catch (Exception ex)
@@ -69,7 +68,7 @@ namespace AddressBookDB
                 sqlConnection.Close();
             }
         }
-        public static void RetrieveAllContactsInDateRange(DateTime startDate,DateTime endDate)
+        public static void RetrieveAllContactsInDateRange(DateTime startDate, DateTime endDate)
         {
             contacts = new List<ContactModel>();
             try
@@ -159,6 +158,7 @@ namespace AddressBookDB
         {
             try
             {
+                SetConnection();
                 var sqlCommand = new SqlCommand("SpAddContact", sqlConnection);
                 sqlCommand.CommandType = CommandType.StoredProcedure;
                 sqlCommand.Parameters.AddWithValue("@FirstName", updateContactModel.FirstName);
@@ -171,6 +171,7 @@ namespace AddressBookDB
                 sqlCommand.Parameters.AddWithValue("@PhoneNumber", updateContactModel.PhoneNumber);
                 sqlCommand.Parameters.AddWithValue("@Email", updateContactModel.Email);
                 sqlCommand.Parameters.AddWithValue("@DateAdded", updateContactModel.DateAdded);
+                sqlConnection.Open();
                 var reader = sqlCommand.ExecuteNonQuery();
             }
             catch (Exception ex)
@@ -179,38 +180,36 @@ namespace AddressBookDB
                 Console.WriteLine(ex.StackTrace);
                 throw new Exception(ex.Message);
             }
-            
+            finally
+            {
+                sqlConnection.Close();
+            }
+
         }
         public static void AddMultipleContacts(List<ContactModel> contacts)
         {
             try
             {
-                SetConnection();
-                sqlConnection.Open();
-                var th = new Task(() =>
-                {
 
-
-                    contacts.ForEach(contact =>
-                    {
-                        var thread = new Task(() => AddContact(contact));
-                        thread.Start();
-                        thread.Wait();
-                    });
-                });
-                th.Start();
-                th.Wait();
                 
+                contacts.ForEach(contact =>
+                {
+                    var thread = new Task(() => AddContact(contact));
+                    thread.Start();
+                    thread.Wait();
+                });
+                
+                
+
+
+
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.StackTrace);
                 throw new Exception(e.Message);
             }
-            finally
-            {
-                sqlConnection.Close();
-            }
+            
         }
         public static void UpdateContact(ContactModel updateContactModel)
         {
@@ -271,7 +270,7 @@ namespace AddressBookDB
         }
         public static void DisplayContacts()
         {
-            foreach(var contact in contacts)
+            foreach (var contact in contacts)
             {
                 contact.Display();
             }
