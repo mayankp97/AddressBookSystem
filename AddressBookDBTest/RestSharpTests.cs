@@ -64,6 +64,28 @@ namespace AddressBookDBTest
             Assert.AreEqual("address1", dataResponse.Address);
 
         }
+
+        [Test]
+        public void GivenContact_OnUpdate_ReturnsUpdatedContact()
+        {
+            var request = new RestRequest("contacts/1", Method.PUT);
+            var contact = new ContactJson { Name = "Mr. Tomato", Address = "Tomato Farm" };
+
+            var jObjectBody = new JObject();
+            jObjectBody.Add("name", contact.Name);
+            jObjectBody.Add("address", contact.Address);
+
+            request.AddParameter("application/json", jObjectBody, ParameterType.RequestBody);
+
+            var response = client.Execute(request);
+
+            Assert.AreEqual(response.StatusCode, HttpStatusCode.OK);
+            var dataResponse = JsonConvert.DeserializeObject<ContactJson>(response.Content);
+            Assert.AreEqual("Mr. Tomato", dataResponse.Name);
+            Assert.AreEqual("Tomato Farm", dataResponse.Address);
+            Console.WriteLine(response.Content);
+
+        }
         
 
     }
