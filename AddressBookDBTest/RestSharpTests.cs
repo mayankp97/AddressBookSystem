@@ -4,6 +4,7 @@ using NUnit.Framework;
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text;
 
@@ -78,6 +79,7 @@ namespace AddressBookDBTest
             request.AddParameter("application/json", jObjectBody, ParameterType.RequestBody);
 
             var response = client.Execute(request);
+            
 
             Assert.AreEqual(response.StatusCode, HttpStatusCode.OK);
             var dataResponse = JsonConvert.DeserializeObject<ContactJson>(response.Content);
@@ -85,6 +87,16 @@ namespace AddressBookDBTest
             Assert.AreEqual("Tomato Farm", dataResponse.Address);
             Console.WriteLine(response.Content);
 
+        }
+        [Test]
+        public void GivenId_OnDelete_ShouldReturnSucessStatus()
+        {
+            var request = new RestRequest("contacts/2", Method.DELETE);
+
+            var response = client.Execute(request);
+
+            Assert.AreEqual(response.StatusCode, HttpStatusCode.OK);
+            Console.WriteLine(response.Content);
         }
         
 
