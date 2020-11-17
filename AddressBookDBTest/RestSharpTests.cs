@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using RestSharp;
 using System;
@@ -39,18 +40,31 @@ namespace AddressBookDBTest
 
             Assert.AreEqual(response.StatusCode, HttpStatusCode.OK);
             var dataResponse = JsonConvert.DeserializeObject<List<ContactJson>>(response.Content);
-            Assert.AreEqual(1, dataResponse.Count);
+            Assert.AreEqual(4, dataResponse.Count);
             foreach (var contact in dataResponse)
                 Console.WriteLine("Id : {0}, Name : {1}, Address : {2}", contact.Id, contact.Name, contact.Address);
 
         }
-        /*
+        
         [Test]
-        public void GivenContact_OnUpdate_ShouldReturnAddedContacts()
+        public void GivenContact_OnPost_ShouldReturnAddedContacts()
         {
+            var request = new RestRequest("contacts", Method.POST);
+            var contact = new ContactJson { Name = "Lisa", Address = "address1" };
+
+            var jObjectBody = new JObject();
+            jObjectBody.Add("name", contact.Name);
+            jObjectBody.Add("address", contact.Address);
+            request.AddParameter("application/json", jObjectBody, ParameterType.RequestBody);
+            var response = client.Execute(request);
+
+            Assert.AreEqual(response.StatusCode, HttpStatusCode.Created);
+            var dataResponse = JsonConvert.DeserializeObject<ContactJson>(response.Content);
+            Assert.AreEqual("Lisa", dataResponse.Name);
+            Assert.AreEqual("address1", dataResponse.Address);
 
         }
-        */
+        
 
     }
 }
